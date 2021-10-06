@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+    postgres:
+        image: postgres:9.6
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+    scheduler:
+        image: apache/airflow:1.10.14-python3.6
+        command: scheduler
+        depends_on:
+            - postgres
+        env_file:
+            - .env
+        volumes:
+            - ./dags:/opt/airflow/dags
+            - ./logs:/opt/airflow/logs
+            - ./config:/opt/airflow/
+    webserver:
+        image: apache/airflow:1.10.14-python3.6
+        entrypoint: ./scripts/entrypoint.sh
+        depends_on:
+            - postgres
+            - scheduler
+        env_file:
+            - .env
+        volumes:
+            - ./dags:/opt/airflow/dags
+            - ./logs:/opt/airflow/logs
+            - ./config:/opt/airflow/
+            - ./scripts:/opt/airflow/scripts
+        ports:
+            - "8080:8080"
