@@ -26,3 +26,5 @@
 ##How to see your dag in Airflow GUI
 	Add your dags in ~/airflow-beginner/dags folder
 	this will automatically reflect in GUI.
+	
+	Access you airflow from localhost:8080
